@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+      tr.highlight {
+        background-color: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="table">
+      <tr>
+        <th>Childs List</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td>Child 1</td>
+        <td>
+          <button>Highlight</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Child 2</td>
+        <td><button>Highlight</button></td>
+      </tr>
+    </table>
+    <button id="addRow">Add Child</button>
+
+    <!-- Without Event Bubbling -->
+    <script>
+      console.log("Script Without Event Bubbling Loaded");
+      function attachButtonListener(button) {
+        button.addEventListener("click", () => {
+          const row = button.closest("tr");
+          row.classList.toggle("highlight");
+        });
+      }
+
+      //Attach listeners to existing buttons
+      const buttons = document.querySelectorAll("table button");
+      buttons.forEach(attachButtonListener);
+
+      //Add new rows dynamically
+      const addRowButton = document.getElementById("addRow");
+      addRowButton.addEventListener("click", () => {
+        const table = document.getElementById("table");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `<td>Child ${table.rows.length}</td><td><button>Highlight</button></td>`;
+        table.appendChild(newRow);
+
+        //Attach listener to the new button
+        const newButton = newRow.querySelector("button");
+        attachButtonListener(newButton);
+      });
+    </script>
+
+    <!-- With Event Bubbling -->
+    <script>
+      console.log("Script With Event Bubbling Loaded");
+      const table = document.getElementById("table");
+
+      //Event delegation using event bubbling
+      table.addEventListener("click", (event) => {
+        if (event.target.tagName === "BUTTON") {
+          const row = event.target.closest("tr");
+          row.classList.toggle("highlight");
+        }
+      });
+
+      //Add new rows dynamically
+      const addRowButton = document.getElementById("addRow");
+      addRowButton.addEventListener("click", () => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `<td>Child ${table.rows.length}</td><td><button>Highlight</button></td>`;
+        table.appendChild(newRow);
+      });
+    </script>
+  </body>
+</html>

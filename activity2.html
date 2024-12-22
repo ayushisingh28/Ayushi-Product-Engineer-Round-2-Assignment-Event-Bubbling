@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+
+  <body>
+    <div id="grandparent">
+      Grandparent
+      <div id="parent">
+        Parent
+        <button id="child">Child</button>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("grandparent").addEventListener("click", () => {
+        console.log("Grandparent clicked");
+      });
+
+      document.getElementById("parent").addEventListener("click", () => {
+        console.log("Parent clicked");
+      });
+
+      document.getElementById("child").addEventListener("click", () => {
+        event.stopPropagation();
+        //Stops the event from propagating to parent elements
+        console.log("Child clicked (bubbling stopped)");
+      });
+    </script>
+  </body>
+</html>
